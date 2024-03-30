@@ -1,0 +1,50 @@
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unit Conversion Application</title>
+</head>
+<body>
+  <h1>Unit Conversion</h1>
+  <form action="/convert" method="post">
+    <div>
+      <label for="from_unit">From:</label>
+      <select id="from_unit" name="from_unit">
+        <option value="mm">Millimeter (mm)</option>
+        <option value="cm">Centimeter (cm)</option>
+        <option value="m">Meter (m)</option>
+        <option value="km">Kilometer (km)</option>
+        <option value="inches">Inches (in)</option>
+        <option value="yards">Yards (yd)</option>
+        <option value="grams">Gram (g)</option>
+        <option value="kilograms">Kilogram (kg)</option>
+        <option value="pounds">Pound (lb)</option>
+        <option value="stone">Stone (st)</option>
+      </select>
+    </div>
+    <div>
+      <label for="to_unit">To:</label>
+      <select id="to_unit" name="to_unit">
+        <option value="mm">Millimeter (mm)</option>
+        <option value="cm">Centimeter (cm)</option>
+        <option value="m">Meter (m)</option>
+        <option value="km">Kilometer (km)</option>
+        <option value="inches">Inches (in)</option>
+        <option value="yards">Yards (yd)</option>
+        <option value="grams">Gram (g)</option>
+        <option value="kilograms">Kilogram (kg)</option>
+        <option value="pounds">Pound (lb)</option>
+        <option value="stone">Stone (st)</option>
+      </select>
+    </div>
+    <div>
+      <label for="input_value">Input Value:</label>
+      <input type="text" id="input_value" name="input_value" required>
+    </div>
+    <div>
+      <button type="submit">Convert</button>
+    </div>
+  </form>
+</body>
+</html>

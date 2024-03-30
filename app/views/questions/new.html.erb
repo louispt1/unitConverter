@@ -1,0 +1,53 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unit Conversion Application</title>
+</head>
+<body>
+  <h1>Unit Conversion</h1>
+  <%= form_tag('/questions/convert') do %>
+    <div>
+      <%= label_tag :from_unit, "From:" %>
+      <%= select_tag :from_unit, options_for_select([['Millimeter (mm)', 'mm'],
+                                                    ['Centimeter (cm)', 'cm'],
+                                                    ['Meter (m)', 'm'],
+                                                    ['Kilometer (km)', 'km'],
+                                                    ['Inches (in)', 'inches'],
+                                                    ['Yards (yd)', 'yards'],
+                                                    ['Gram (g)', 'grams'],
+                                                    ['Kilogram (kg)', 'kilograms'],
+                                                    ['Pound (lb)', 'pounds'],
+                                                    ['Stone (st)', 'stone']]) %>
+    </div>
+    <div>
+      <%= label_tag :to_unit, "To:" %>
+      <%= select_tag :to_unit, options_for_select([['Millimeter (mm)', 'mm'],
+                                                  ['Centimeter (cm)', 'cm'],
+                                                  ['Meter (m)', 'm'],
+                                                  ['Kilometer (km)', 'km'],
+                                                  ['Inches (in)', 'inches'],
+                                                  ['Yards (yd)', 'yards'],
+                                                  ['Gram (g)', 'grams'],
+                                                  ['Kilogram (kg)', 'kilograms'],
+                                                  ['Pound (lb)', 'pounds'],
+                                                  ['Stone (st)', 'stone']]) %>
+    </div>
+    <div>
+      <%= label_tag :input_value, "Input Value:" %>
+      <%= text_field_tag :input_value, nil, required: true %>
+    </div>
+    <div>
+      <%= submit_tag "Convert" %>
+    </div>
+  <% end %>
+
+<% if params[:converted_value].present? %>
+  <div>
+    <h2>Conversion Result:</h2>
+    <p>The converted value is: <%= params[:converted_value] %></p>
+  </div>
+<% end %>
+
+</body>
+</html>
