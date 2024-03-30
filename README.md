@@ -22,3 +22,7 @@ Things you may want to cover:
 * Deployment instructions
 
 * ...
+
+TODO:
+- Update Readme
+- Check you can send and package code so it runs intuitively
