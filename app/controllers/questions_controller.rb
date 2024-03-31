@@ -17,7 +17,7 @@ class QuestionsController < ApplicationController
             flash[:notice] = "Conversion successful."
             @converted_value = converted_value
           end
-    @conversion_occurred = true
+    @conversion_occurred = true     # So the error message only shows up after a conversion has been attempted
     redirect_to root_path(converted_value: @converted_value, conversion_occurred: @conversion_occurred)
     end
 end
