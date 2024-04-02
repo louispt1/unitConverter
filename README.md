@@ -6,5 +6,6 @@ This was my first Ruby web app, and more or less the first time I coded anything
 
 **Deployment:**
   - The app is not deployed or hosted, so you can only run it locally for now.
-  - Fork the repo, run the rails server (`rails s`) and then the application should run, usually on your default 127.0.0.1 network address.
-  - The application should work intuitively.
+  - Clone the repo `git clone git@github.com:louispt1/unitConverter.git`
+  - In the directory, `bundle install`, `rake db:migrate`
+  - Then run the rais server `rails s`.
