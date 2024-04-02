@@ -8,4 +8,4 @@ This was my first Ruby web app, and more or less the first time I coded anything
   - The app is not deployed or hosted, so you can only run it locally for now.
   - Clone the repo `git clone git@github.com:louispt1/unitConverter.git`
   - In the directory, `bundle install`, `rake db:migrate`
-  - Then run the rais server `rails s`.
+  - Then run the rails server `rails s`.
