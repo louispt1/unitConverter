@@ -1,26 +1,91 @@
 class UnitConversion
   def self.convert(value, from_unit, to_unit)
-    conversion_factors = {
-      'mm' => { 'cm' => 0.1, 'm' => 0.001, 'km' => 0.000001, 'in' => 0.0393701, 'yd' => 0.00109361},
-      'cm' => { 'mm' => 10, 'm' => 0.01 , 'km' => 0.0001, 'in' => 0.393701, 'yd' => 0.0109361},
-      'm' => { 'mm' => 1000, 'cm' => 100, 'km' => 0.001, 'in' => 39.3701, 'yd' => 1.09361},
-      'km' => { 'mm' => 1000000, 'cm' => 1000000, 'm' => 1000, 'in' => 39370.1, 'yd' => 1093.61},
-      'in' => { 'mm' => 25.4, 'cm' => 2.54, 'm' => 0.0254, 'km' => 0.0000254, 'yd' => 0.0277778},
-      'yd' => { 'mm' => 914.4, 'cm' => 91.44, 'm' => 0.9144, 'km' => 0.0009144, 'in' => 36},
+    return nil unless value != 0.0
+    return value if from_unit == to_unit 
+    
+    converter = find_converter(from_unit) 
+    return nil unless converter           
 
-      'g' => { 'kg' => 0.001, 'lb' => 0.00220462, 'st' => 0.000157473},
-      'kg' => { 'g' => 1000, 'lb' =>  2.20462, 'st' => 0.157473}, 
-      'lb' => { 'g' => 453.592, 'kg' => 0.453592, 'st' => 0.0714286}, 
-      'st' => { 'g' => 6350.29, 'kg' => 6.35029, 'lb' => 14}, 
-    }
+    common_unit = converter.common_unit 
+    value_in_common_unit = converter.to_common_unit(value, from_unit)
+    return nil unless value_in_common_unit 
 
-    return value if from_unit == to_unit
+    return converter.from_common_unit(value_in_common_unit, common_unit, to_unit).round(3) # May want to adjust rounding depending on unit types included
+  end
 
-    if conversion_factors[from_unit].nil? || conversion_factors[from_unit][to_unit].nil?
-      return nil  # Units are not convertible
-    else
-      conversion_factor = conversion_factors[from_unit][to_unit]
-      return (value * conversion_factor).round(5)
+  def self.find_converter(unit)
+    converters = [DistanceConverter, MassConverter] # Add more converters for other unit types here
+    converters.each do |converter|
+      return converter if converter.supported_units.include?(unit)
     end
   end
 end
+
+
+class DistanceConverter
+  SUPPORTED_UNITS = ['mm', 'cm', 'm', 'km', 'in', 'yd'] # Expand here to reflect any added units
+  COMMON_UNIT = 'm'
+
+  CONVERSION_FACTORS = {                                # Expand here to reflect any added units
+    'mm' => 0.001,
+    'cm' => 0.01,
+    'm' => 1,
+    'km' => 1000,
+    'in' => 0.0254,
+    'yd' => 0.9144
+  }
+
+  def self.supported_units
+    SUPPORTED_UNITS
+  end
+
+  def self.common_unit
+    COMMON_UNIT
+  end
+
+  def self.to_common_unit(value, from_unit)
+    conversion_factor = CONVERSION_FACTORS[from_unit]   
+    return nil unless conversion_factor                 
+    return value * conversion_factor                           
+  end
+
+  def self.from_common_unit(value, common_unit, to_unit)
+    conversion_factor = CONVERSION_FACTORS[to_unit]     
+    return nil unless conversion_factor                 
+    return value / conversion_factor                    
+  end
+end
+
+class MassConverter                                     # Can replicate with more classes for more unit types.
+  SUPPORTED_UNITS = ['g', 'kg', 'lb', 'st']
+  COMMON_UNIT = 'kg'
+
+  CONVERSION_FACTORS = {
+    'g' => 0.001,
+    'kg' => 1,
+    'lb' => 0.453592,
+    'st' => 6.35029
+  }
+
+  def self.supported_units
+    SUPPORTED_UNITS
+  end
+
+  def self.common_unit
+    COMMON_UNIT
+  end
+
+  def self.to_common_unit(value, from_unit)
+    conversion_factor = CONVERSION_FACTORS[from_unit]
+    return nil unless conversion_factor
+    return value * conversion_factor
+  end
+
+  def self.from_common_unit(value, common_unit, to_unit)
+    conversion_factor = CONVERSION_FACTORS[to_unit]
+    return nil unless conversion_factor
+    return value / conversion_factor
+  end
+  
+end
+

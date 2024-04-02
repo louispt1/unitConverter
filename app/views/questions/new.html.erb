@@ -1,16 +1,98 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Unit Conversion Application</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #faedcd;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      width: 80%;
+      max-width: 600px;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    form div {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+    }
+
+    select, input[type="text"], input[type="submit"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+
+    input[type="submit"] {
+      background-color: #ccd5ae;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #e9edc9;
+    }
+
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 5px;
+      background-color: #f0f0f0;
+      text-align: center;
+    }
+
+    .result p {
+      margin: 0;
+      font-weight: bold;
+    }
+  </style>
 </head>
 
 <body>
-  <h1>Unit Conversion</h1>
-  <%= form_tag('/questions/displayConversion') do %>
-    <div>
-      <%= label_tag :from_unit, "From:" %>
-      <%= select_tag :from_unit, options_for_select([['Millimeter (mm)', 'mm'],
+  <div class="container">
+    <h1>Unit Conversion</h1>
+    <%= form_tag('/questions/displayConversion') do %>
+      <div>
+        <%= label_tag :from_unit, "From:" %>
+        <%= select_tag :from_unit, options_for_select([['Millimeter (mm)', 'mm'],
+                                                      ['Centimeter (cm)', 'cm'],
+                                                      ['Meter (m)', 'm'],
+                                                      ['Kilometer (km)', 'km'],
+                                                      ['Inches (in)', 'in'],
+                                                      ['Yards (yd)', 'yd'],
+                                                      ['Gram (g)', 'g'],
+                                                      ['Kilogram (kg)', 'kg'],
+                                                      ['Pound (lb)', 'lb'],
+                                                      ['Stone (st)', 'st']]) %>
+      </div>
+      <div>
+        <%= label_tag :to_unit, "To:" %>
+        <%= select_tag :to_unit, options_for_select([['Millimeter (mm)', 'mm'],
                                                     ['Centimeter (cm)', 'cm'],
                                                     ['Meter (m)', 'm'],
                                                     ['Kilometer (km)', 'km'],
@@ -20,40 +102,25 @@
                                                     ['Kilogram (kg)', 'kg'],
                                                     ['Pound (lb)', 'lb'],
                                                     ['Stone (st)', 'st']]) %>
-    </div>
-    <div>
-      <%= label_tag :to_unit, "To:" %>
-      <%= select_tag :to_unit, options_for_select([['Millimeter (mm)', 'mm'],
-                                                  ['Centimeter (cm)', 'cm'],
-                                                  ['Meter (m)', 'm'],
-                                                  ['Kilometer (km)', 'km'],
-                                                  ['Inches (in)', 'in'],
-                                                  ['Yards (yd)', 'yd'],
-                                                  ['Gram (g)', 'g'],
-                                                  ['Kilogram (kg)', 'kg'],
-                                                  ['Pound (lb)', 'lb'],
-                                                  ['Stone (st)', 'st']]) %>
-    </div>
-    <div>
-      <%= label_tag :input_value, "Input Value:" %>
-      <%= text_field_tag :input_value, nil, required: true %>
-    </div>
-    <div>
-      <%= submit_tag "Convert" %>
-    </div>
-  <% end %>
+      </div>
+      <div>
+        <%= label_tag :input_value, "Input Value:" %>
+        <%= text_field_tag :input_value, nil, required: true %>
+      </div>
+      <div>
+        <%= submit_tag "Convert" %>
+      </div>
+    <% end %>
 
-<% if params[:converted_value].present? %>
-  <div>
-    <h2>Conversion Result:</h2>
-    <p>The converted value is: <%= params[:converted_value] %></p>
+    <% if params[:converted_value].present? %>
+      <div class="result">
+        <p>Conversion Result: <%= params[:input_value] %> <%= params[:from_unit] %> is equal to <%= params[:converted_value] %> <%= params[:to_unit] %></p>
+      </div>
+    <% elsif params[:conversion_occurred] %>
+      <div class="result">
+        <p>Units are not convertible.</p>
+      </div>
+    <% end %>
   </div>
-<% elsif params[:conversion_occurred] %>      
-  <div>
-    <p>Units are not convertible.</p>
-  </div>
-<% end %>
-
-
 </body>
 </html>
