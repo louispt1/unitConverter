@@ -19,6 +19,12 @@ class UnitConversion
       return converter if converter.supported_units.include?(unit)
     end
   end
+
+  def self.supported_units
+    converters = [DistanceConverter, MassConverter]  # Add more converters for other unit types here
+    supported_units = converters.flat_map(&:supported_units)
+    supported_units.join(', ')
+  end
 end
 
 
@@ -86,6 +92,5 @@ class MassConverter                                     # Can replicate with mor
     return nil unless conversion_factor
     return value / conversion_factor
   end
-  
 end
 

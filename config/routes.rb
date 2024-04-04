@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   root to: "questions#new" # Set landing page to 'new' action of questions controller
 
-  post 'questions/displayConversion' # Handles int conversion submissions
+  get 'questions/displayConversion', to: 'questions#displayConversion'
 
   resources :questions
 end

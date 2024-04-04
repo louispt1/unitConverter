@@ -9,118 +9,109 @@
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #faedcd;
-      color: #333;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      background-color: #f7f7f7;
     }
 
     .container {
-      width: 80%;
-      max-width: 600px;
+      max-width: 500px;
+      margin: 50px auto;
       padding: 20px;
       background-color: #fff;
-      border-radius: 10px;
+      border-radius: 8px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
 
     h1 {
       text-align: center;
       margin-bottom: 20px;
-    }
-
-    form div {
-      margin-bottom: 15px;
+      color: #333;
     }
 
     label {
       display: block;
       font-weight: bold;
+      margin-bottom: 5px;
     }
 
-    select, input[type="text"], input[type="submit"] {
-      width: 100%;
+    input[type="text"] {
+      width: calc(100% - 10px);
       padding: 10px;
       border: 1px solid #ccc;
       border-radius: 5px;
+      margin-bottom: 15px;
       box-sizing: border-box;
     }
 
-    input[type="submit"] {
-      background-color: #ccd5ae;
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #4CAF50;
       color: #fff;
+      border: none;
+      border-radius: 5px;
       cursor: pointer;
     }
 
-    input[type="submit"]:hover {
-      background-color: #e9edc9;
+    button:hover {
+      background-color: #45a049;
     }
 
-    .result {
+    #conversion_result {
       margin-top: 20px;
-      padding: 15px;
+      padding: 10px;
       border-radius: 5px;
       background-color: #f0f0f0;
       text-align: center;
     }
 
-    .result p {
-      margin: 0;
-      font-weight: bold;
+    .supported-units {
+      margin-top: 20px;
     }
   </style>
 </head>
-
 <body>
   <div class="container">
     <h1>Unit Conversion</h1>
-    <%= form_tag('/questions/displayConversion') do %>
-      <div>
-        <%= label_tag :from_unit, "From:" %>
-        <%= select_tag :from_unit, options_for_select([['Millimeter (mm)', 'mm'],
-                                                      ['Centimeter (cm)', 'cm'],
-                                                      ['Meter (m)', 'm'],
-                                                      ['Kilometer (km)', 'km'],
-                                                      ['Inches (in)', 'in'],
-                                                      ['Yards (yd)', 'yd'],
-                                                      ['Gram (g)', 'g'],
-                                                      ['Kilogram (kg)', 'kg'],
-                                                      ['Pound (lb)', 'lb'],
-                                                      ['Stone (st)', 'st']]) %>
-      </div>
-      <div>
-        <%= label_tag :to_unit, "To:" %>
-        <%= select_tag :to_unit, options_for_select([['Millimeter (mm)', 'mm'],
-                                                    ['Centimeter (cm)', 'cm'],
-                                                    ['Meter (m)', 'm'],
-                                                    ['Kilometer (km)', 'km'],
-                                                    ['Inches (in)', 'in'],
-                                                    ['Yards (yd)', 'yd'],
-                                                    ['Gram (g)', 'g'],
-                                                    ['Kilogram (kg)', 'kg'],
-                                                    ['Pound (lb)', 'lb'],
-                                                    ['Stone (st)', 'st']]) %>
-      </div>
-      <div>
-        <%= label_tag :input_value, "Input Value:" %>
-        <%= text_field_tag :input_value, nil, required: true %>
-      </div>
-      <div>
-        <%= submit_tag "Convert" %>
-      </div>
-    <% end %>
-
-    <% if params[:converted_value].present? %>
-      <div class="result">
-        <p>Conversion Result: <%= params[:input_value] %> <%= params[:from_unit] %> is equal to <%= params[:converted_value] %> <%= params[:to_unit] %></p>
-      </div>
-    <% elsif params[:conversion_occurred] %>
-      <div class="result">
-        <p>Units are not convertible.</p>
-      </div>
-    <% end %>
+    <p>Please enter your search query below in the format:</p>
+    <p><strong>[Value] [From Unit] in [To Unit]</strong></p>
+    <p>For example: "5 mm in km"</p>
+    <div class="supported-units">
+      <p>Supported units: <%= UnitConversion.supported_units %></p>
+    </div>
+    <div>
+      <label for="search_query">Search Query:</label>
+      <input type="text" id="search_query" name="search_query" required>
+    </div>
+    <div>
+      <button onclick="submitSearchQuery()">Convert</button>
+    </div>
+    <div id="conversion_result"></div>
   </div>
+
+  <script>
+    function submitSearchQuery() {
+      var searchQuery = document.getElementById("search_query").value;
+      fetch("/questions/displayConversion?search_query=" + encodeURIComponent(searchQuery))
+        .then(response => response.json())
+        .then(data => {
+          if (data.error) {
+            document.getElementById("conversion_result").innerText = data.error;
+          } else {
+            document.getElementById("conversion_result").innerText = "Conversion Result: " + data.input_value + " " + data.from_unit + " is equal to " + data.converted_value + " " + data.to_unit;
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          document.getElementById("conversion_result").innerText = "An error occurred while processing your request.";
+        });
+    }
+
+    // Add event listener for Enter key press in the input field
+    document.getElementById("search_query").addEventListener("keypress", function(event) {
+      if (event.key === "Enter") {
+        submitSearchQuery();
+      }
+    });
+  </script>
 </body>
 </html>
